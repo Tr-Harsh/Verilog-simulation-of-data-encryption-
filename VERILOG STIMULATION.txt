@@ -1,0 +1,48 @@
+`timescale 1ns/1ps
+
+module stimulus;
+reg [3:0] a;
+reg [3:0] b;
+reg cin;
+  wire [3:0] m;
+wire pass;
+wire parity;
+wire carry;
+main uut(
+.a(a),
+.b(b),
+.cin(cin),
+  .m(m),
+.pass(pass),
+.parity(parity),
+.carry(carry)
+);
+initial begin
+	a=4'b1001;
+	b=4'b1001;
+	cin=1'b0;
+	#20 a = 4'b0010;
+	#20 a = 4'b0011;
+	#20 a = 4'b0100;
+	#20 a = 4'b0101;  
+	#20 a = 4'b0110;
+	#20 b = 4'b0110;
+	#20 a = 4'b1000;
+	#20 b = 4'b1001;
+	#20 a = 4'b1010;
+	#20 b = 4'b1011;
+	#20 b = 4'b1100;
+	#20 b = 4'b1101;  
+	#20 b = 4'b1110;
+	#20 b = 4'b1111;
+	#40 ;
+ 
+end
+
+initial begin
+  $monitor("t=%3d m=%4b carry=%1b parity=%1b pass=%1b ",$time,m,parity,carry,pass);
+  $dumpfile("dump.vcd"); 
+  $dumpvars;
+end
+endmodule
+

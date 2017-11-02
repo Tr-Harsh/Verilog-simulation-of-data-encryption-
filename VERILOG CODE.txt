@@ -1,0 +1,138 @@
+module main
+(
+input reg [3:0] a,
+input reg [3:0] b,
+input cin,
+  output reg [3:0] m,
+output reg pass,
+output reg parity,
+output reg carry
+);
+wire w1,w2,w3,w4,w5,w6,w7,w8,w9,w10,w11,w12,w13,w14,w15,w16,w17,w18,w19,w20, w21,w22,w23,w24,w25,w26,w27,w28,w29,w30,w31,w32,w33,w34,w35,w36,w37,w38,w39,s1,s2,s3,s4,cout1,cout2,cout3,fout,temp,temp2,temp1; 
+
+  //passwordcheck
+xnor(w1,a[0],b[0]);
+xnor(w2,a[1],b[1]);
+xnor(w3,a[2],b[2]);
+xnor(w4,a[3],b[3]);
+
+and(w5,w1,w2);
+and(w6,w5,w3);
+  and(w7,w6,w4);
+
+//binarytogray
+xor(w8,a[0],a[1]);
+xor(w9,a[1],a[2]);
+xor(w10,a[2],a[3]);
+
+//codeswap
+  not(w11,a[0]);
+  not(w12,w8);
+  not(w13,w9);
+  not(w14,w10);
+
+  and(w15,w11,w8);
+  and(w16,a[0],w12);
+  and(w17,w13,w10);
+  and(w18,w9,w14);
+
+forsubs
+not(t1,w15);
+not(t2,w16);
+not(t3,w17);
+not(t4,w18);
+
+//parity
+xor(temp1,w15,w16);
+xor(temp2,w17,w18);
+xor(temp,temp1,temp2);
+not(nparity,temp);
+assign parity=temp;
+  //sumsc
+  
+
+
+
+  
+//adder
+//bit1
+  generate
+    begin
+if(parity)
+    
+begin
+xor(w19,a[0],b[0]);
+xor(s1,w19,cin);
+
+  and(w20,a[0],cin);
+and(w21,a[0],b[0]);
+and(w22,b[0],cin);
+or(w23,w20,w21);
+or(cout1,w23,w22);
+//bit2
+xor(w25,a[1],b[1]);
+xor(s2,w25,cout1);
+
+  and(w26,a[1],b[1]);
+and(w27,a[1],cout1);
+and(w28,b[1],cout1);
+or(w29,w26,w27);
+or(cout2,w29,w28);
+//bit3
+xor(w30,a[2],b[2]);
+xor(s3,w30,cout2);
+
+  and(w31,a[2],b[2]);
+and(w32,a[2],cout2);
+and(w33,b[2],cout2);
+or(w34,w31,w32);
+or(cout3,w34,w33);
+//bit4
+xor(w35,a[3],b[3]);
+xor(s4,w35,cout3);
+
+  and(w36,a[3],b[3]);
+and(w37,a[3],cout3);
+and(w38,b[3],cout3);
+or(w39,w36,w37);
+or(fout,w39,w8);
+end
+  
+  if(nparity)
+begin
+//bit1
+and(w20,t1,cin);
+and(w21,t1,b[0]);
+and(w22,b[0],cin);
+or(w23,w20,w21);
+or(cout1,w23,w22);
+//bit2
+and(w26,t2,b[1]);
+and(w27,t2,cout1);
+and(w28,b[1],cout1);
+and(w29,w26,w27);
+and(cout2,w29,w28);
+//bit3
+and(w31,t3,b[2]);
+and(w32,t3,cout2);
+and(w33,b[2],cout2);
+or(w34,w31,w32);
+or(cout3,w34,w33);
+//bit4
+and(w36,t4,b[3]);
+and(w37,t4,cout3);
+and(w38,b[3],cout3);
+or(w39,w36,w37);
+or(fout,w39,w8);
+end
+  endgenerate
+
+assign pass=w7;
+
+assign m[0]=s1;
+assign m[1]=s2;
+assign m[2]=s3;
+assign m[3]=s4;
+assign carry=fout;
+ 
+endmodule
